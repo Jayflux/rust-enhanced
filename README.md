@@ -3,7 +3,8 @@
 ## About
 
 This package supports Rust starting with version 1.0,
-it makes no attempt at supporting earlier incompatible versions.
+it makes no attempt at supporting earlier incompatible versions.   
+It also supports Sublime Text 3 and above.
 
 ## Installation
 
@@ -56,12 +57,7 @@ it will try to interpret '\\(' as a JSON escape code (which doesn't exist).
 Created 2012 by [Daniel Patterson](mailto:dbp@riseup.net), as a near complete from
 scratch rewrite of a package by [Felix Martini](https://github.com/fmartini).
 
-Derived primarily from the Vim syntax file, maintained by
-[Patrick Walton](https://github.com/pcwalton) and
-[Ben Blum](https://github.com/bblum)
-
-With a little help from the (now very outdated) TextMate rust mode written
-by [Tom Ellis](https://github.com/tomgrohl).
+Maintained by [Jason Williams](https://github.com/fmartini)
 
 ## License
 
