@@ -24,7 +24,10 @@ contexts:
 
   statements:
 
-    - match: '(''{{identifier}})\s*(:)'
+    - match: ';'
+      scope: punctuation.terminator
+
+    - match: '({{identifier}})\s*(:)'
       captures:
         1: entity.name.label.rust
         2: punctuation.separator.rust
@@ -91,7 +94,7 @@ contexts:
         - include: statements-block
 
     - match: \b(let|const|static)\b
-      scope: storage.type.rust
+      scope: storage.type.rust keyword.other.rust
 
     - match: \bfn\b
       scope: storage.type.function.rust
@@ -486,13 +489,17 @@ contexts:
           scope: storage.modifier.rust
         - match: '{{identifier}}(?=\s*:)'
           scope: variable.other.member.rust
+        # - match: '\b{{identifier}}'
+        #   scope: storage.type.rust
           push:
             - match: ',|(?=\})'
               pop: true
             - include: comments
             - match: ':'
               scope: punctuation.separator.rust
-            - include: type-any-identifier
+            - include: basic-identifiers
+            - match: '(?=<)'
+              push: generic-angles
 
   macro-block:
     - meta_scope: meta.macro.rust
@@ -530,6 +537,7 @@ contexts:
       scope: punctuation.definition.group.begin.rust
       push: macro-matcher
     - match: ';'
+      pop: true
 
   macro-matcher:
     - meta_include_prototype: false
@@ -637,7 +645,7 @@ contexts:
       set: impl-body
     - match: \bwhere\b
       scope: keyword.other.rust
-    - include: type-any-identifier
+    - include: basic-identifiers
     - match: ':'
       scope: punctuation.separator.rust
 
@@ -658,8 +666,10 @@ contexts:
       push: generic-angles
     - match: '(?=\()'
       set: fn-parameters
+    - match: \bwhere\b
+      set: fn-where
     # Escape for incomplete expression
-    - match: '(?=\S)'
+    - match: '(?=;)'
       pop: true
 
   fn-parameters:
@@ -700,9 +710,11 @@ contexts:
       set: fn-body
     - match: \bwhere\b
       scope: keyword.other.rust
-    - include: type-any-identifier
+    - include: basic-identifiers
     - match: ':'
       scope: punctuation.separator.rust
+    - match: ';'
+      pop: true
 
   fn-body:
     - meta_scope: meta.function.rust
@@ -921,6 +933,8 @@ contexts:
       scope: constant.other.rust
     - match: '\b(c_[[:lower:][:digit:]_]+|[[:lower:]_][[:lower:][:digit:]_]*_t)\b'
       scope: storage.type.rust
+    - match: '\b_*[A-Z][a-zA-Z0-9_]*[a-z][a-zA-Z0-9_]*\b'
+      scope: storage.type.source.rust
     - match: '(?={{identifier}}::)'
       push:
         - meta_scope: meta.path.rust
