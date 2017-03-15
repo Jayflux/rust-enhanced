@@ -94,7 +94,8 @@ class rustPluginSyntaxCheckEvent(sublime_plugin.EventListener):
         # This means ~./cargo/bin won't be added (causing rustup to fail), we can manually add it back in here. [This is a hack, hopefully Sublime fixes this natively]
         # fixes https://github.com/rust-lang/sublime-rust/issues/126
         env = os.environ.copy() # copy so we don't modify the current processs' environment
-        env["PATH"] = "~/.cargo/bin:" + env["PATH"]
+        normalised_cargo_path = os.path.normpath("~/.cargo/bin") + ";" if os.name == "nt" else ":"
+        env["PATH"] = normalised_cargo_path + env["PATH"]
 
         cmd = ' '.join(['cargo']+args)
         print('Running %r' % cmd)
